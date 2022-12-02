@@ -1,6 +1,6 @@
 package com.controllers;
 
-import com.services.QRCodeForURLService;
+import com.services.QRCodeGenerationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/generateQRCode")
 public class QRCodeForURLController {
 
-    private final QRCodeForURLService qrCodeForURLService;
+    private final QRCodeGenerationService qrCodeForURLService;
 
-    @PostMapping("/linkWithURL")
-    @ResponseBody
-    public void generateQRCodeForURL(@RequestBody String url){
-         qrCodeForURLService.generateQRCodeFromURL(url);
-         return;
+    @GetMapping("/linkWithURL")
+    public @ResponseBody byte[] generateQRCodeForURL(@RequestBody byte[] menuFile){
+         return qrCodeForURLService.generateQRCode(menuFile);
     }
 
 

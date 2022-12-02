@@ -1,0 +1,5 @@
+spring:
+  domainName: "localhost:8080"
+  qrcodeScannerEndpoint: "/scanqrcode"
+  filesDirectory: "C://menus"
+  qrCodesDirectory: "C://qrcodes"
