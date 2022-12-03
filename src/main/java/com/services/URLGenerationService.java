@@ -14,20 +14,22 @@ public class URLGenerationService {
     @Value("${spring.qrcodeScannerEndpoint}")
     private String scanEndpoint;
 
-    public String generateToken(){
+    @Value("${spring.qrcodeMethod}")
+    private String qrcodeMethod;
+
+    public String generateToken() {
 
         UUID randomId = UUID.randomUUID();
 
-        return randomId.toString().replace("-","");
+        return randomId.toString().replace("-", "");
     }
 
-    public String generateURL(String token){
-
+    public String generateURL(String token) {
 
 
         StringBuilder urlBuilder = new StringBuilder();
 
-        urlBuilder.append("http://").append(this.domainName)
+        urlBuilder.append("http://").append(this.domainName).append(this.qrcodeMethod)
                 .append(scanEndpoint).append("?token=").append(token);
 
         return urlBuilder.toString();
