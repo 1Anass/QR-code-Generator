@@ -4,3 +4,18 @@ spring:
   qrcodeMethod: "/getQRcodeContent"
   filesDirectory: "C://menus"
   qrCodesDirectory: "C://qrcodes"
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5432/qrcodeapp"
+    username: anassz
+    password: admin@%@
+

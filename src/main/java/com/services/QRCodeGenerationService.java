@@ -36,11 +36,11 @@ public class QRCodeGenerationService {
         String token = urlGenerationService.generateToken();
         String url = urlGenerationService.generateURL(token);
 
-        String qrCodePath = qrCodesDirectory + "/" + token + ".png";
-        String menuPath = filesDirectory + "/" + token + ".png";
+        String qrCodePath = qrCodesDirectory + "/" + token + ".pdf";
+        String menuPath = filesDirectory + "/" + token + ".pdf";
 
         int size = 250;
-        String fileType = "png";
+        String fileType = "pdf";
 
 
         try {
