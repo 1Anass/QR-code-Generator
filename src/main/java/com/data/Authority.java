@@ -13,8 +13,8 @@ import javax.persistence.*;
 public class Authority {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
 
     @Column(name="username")

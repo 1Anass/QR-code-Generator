@@ -11,8 +11,8 @@ import javax.persistence.*;
 public class Menu {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
 
     @Column(name = "menu_name")
@@ -20,6 +20,9 @@ public class Menu {
 
     @Column(name = "token")
     private String token;
+
+    @ManyToOne
+    private Restaurant restaurant;
 
 
 }

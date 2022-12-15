@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -11,8 +12,8 @@ import javax.persistence.*;
 public class Restaurant {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected Long id;
 
 
     @Column(name = "name")
@@ -27,5 +28,10 @@ public class Restaurant {
     private Integer numberOfTables;
     @Column(name = "max_capacity")
     private Integer maxCapacity;
+    @ManyToOne
+    private AppUser appUser;
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    private List<Menu> menus;
+
 
 }
