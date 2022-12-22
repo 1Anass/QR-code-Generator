@@ -12,4 +12,7 @@ public interface AuthorityRepository extends CrudRepository<Authority, String> {
 
     public List<Authority> findByAuthority(String authority);
 
+    public List<Authority> findByUsername(String username);
+
+    boolean  existsCurrentAccountByAuthority(String name);
 }
