@@ -16,10 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 		"com.security",
 })
 @EnableJpaRepositories({
-		"com.repositories"
+		"com.data.repositories"
 })
 @EntityScan({
-		"com.data"
+		"com.data.entities"
 })
 @SpringBootApplication
 public class QrCodeApplication {

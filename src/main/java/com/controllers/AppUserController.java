@@ -1,6 +1,6 @@
 package com.controllers;
 
-import com.data.AppUser;
+import com.data.entities.AppUser;
 import com.services.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

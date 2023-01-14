@@ -1,6 +1,6 @@
-package com.repositories;
+package com.data.repositories;
 
-import com.data.AppUser;
+import com.data.entities.AppUser;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

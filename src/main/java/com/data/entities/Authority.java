@@ -1,4 +1,4 @@
-package com.data;
+package com.data.entities;
 
 
 import com.sun.istack.NotNull;

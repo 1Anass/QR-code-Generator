@@ -47,9 +47,7 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .antMatchers("/users/login","/signup/*").permitAll();
-
-
+                .antMatchers("/*").permitAll();
 
         http.addFilter(customAuthenticationFilter);
 

@@ -1,15 +1,13 @@
 package com.services;
 
-import com.data.AppUser;
-import com.data.Authority;
-import com.repositories.AppUserRepository;
-import com.repositories.AuthorityRepository;
+import com.data.entities.AppUser;
+import com.data.entities.Authority;
+import com.data.repositories.AppUserRepository;
+import com.data.repositories.AuthorityRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -32,29 +29,34 @@ public class AppUserService implements UserDetailsService {
     public ResponseEntity<HttpStatus> createSuperAdmin(String username, String password, String firstName, String lastName,
                                                        String emailAddress) {
 
-        if (!authorityRepository.findByAuthority("ROLE_SUPERADMIN").isEmpty())
+        log.info("SUPERADMIN creation started");
+
+        if (!authorityRepository.findByAuthority("SUPERADMIN").isEmpty())
             return new ResponseEntity<HttpStatus>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        String[] authorities = {"ROLE_SUPERADMIN"};
+        String[] authorities = {"SUPERADMIN"};
         return create(username, password, firstName, lastName, emailAddress, authorities);
 
     }
 
     public ResponseEntity<HttpStatus> createAdmin(String username, String password, String firstName, String lastName, String emailAddress) {
 
-        String[] authorities = {"ROLE_ADMIN"};
+        log.info("ADMIN creation started");
+        String[] authorities = {"ADMIN"};
         return create(username, password, firstName, lastName, emailAddress, authorities);
     }
 
     public ResponseEntity<HttpStatus> createUser(String username, String password, String firstName, String lastName, String emailAddress) {
 
-        String[] authorities = {"ROLE_USER"};
+        log.info("USER creation started");
+        String[] authorities = {"USER"};
         return create(username, password, firstName, lastName, emailAddress, authorities);
     }
 
     private ResponseEntity<HttpStatus> create(String userName, String password, String firstName, String lastName, String email,
                                               String[] authorities) {
 
+        log.info("CREATION Method started");
         Set<Authority> auths = new HashSet<>();
         for (String auth : authorities) {
             auths.add(new Authority(userName, auth));
@@ -69,6 +71,8 @@ public class AppUserService implements UserDetailsService {
 
     public ResponseEntity<HttpStatus> update(long userId, String password, String newPassword, String firstName, String lastName,
                        String emailAddress) {
+
+        log.info("USER UPDATE started");
         Optional<AppUser> appUser = appUserRepository.findById(userId);
 
         if (appUser.isEmpty()) {
@@ -97,8 +101,14 @@ public class AppUserService implements UserDetailsService {
 
     }
 
+    public AppUser findByUsername(String username){
+        return appUserRepository.findByUserName(username).orElse(null);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        log.info("Loading User started");
         AppUser user = appUserRepository.findByUserName(username).orElse(null);
         if (Objects.isNull(user)) {
             log.error("User not found in the database");
