@@ -49,7 +49,7 @@ public class AppUserService implements UserDetailsService {
     public ResponseEntity<HttpStatus> createUser(String username, String password, String firstName, String lastName, String emailAddress) {
 
         log.info("USER creation started");
-        String[] authorities = {"USER"};
+        String[] authorities = {"SERVICE_PROVIDER"};
         return create(username, password, firstName, lastName, emailAddress, authorities);
     }
 

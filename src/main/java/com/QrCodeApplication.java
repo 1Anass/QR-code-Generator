@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 		"com.services",
 		"com.controllers",
 		"com.security",
+		"com.utils"
 })
 @EnableJpaRepositories({
 		"com.data.repositories"

@@ -38,6 +38,8 @@ public class Restaurant {
     private AppUser appUser;
     @OneToOne(cascade = CascadeType.ALL)
     private Menu menu;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Wifi wifi;
 
     @Override
     public String toString() {
