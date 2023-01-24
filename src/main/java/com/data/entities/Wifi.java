@@ -27,6 +27,8 @@ public class Wifi {
     private String password;
     @Column(name = "encryption")
     private String encryption;
+    @Column(name = "qrcodePath")
+    private String QRCodePath;
     @OneToOne(mappedBy = "wifi")
     private Restaurant restaurant;
 

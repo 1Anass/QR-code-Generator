@@ -46,7 +46,7 @@ public class MenuService {
                 .build();
 
         String menuPath = filesDirectory + "/" + menu.getToken() + "/" + name + "_" + city + ".pdf";
-        String qrcodePath = qrCodesDirectory + "/" + menu.getToken() + "/" + name + "_" + city + ".pdf";
+        String qrcodePath = qrCodesDirectory + "/menu/" + menu.getToken() + "/" + name + "_" + city + ".pdf";
         File menuFile = new File(menuPath);
         File fileDirectory = new File(this.filesDirectory + "/" + menu.getToken());
         File qrcodeDirectory = new File(this.qrCodesDirectory + "/" + menu.getToken());

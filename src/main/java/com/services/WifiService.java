@@ -6,6 +6,7 @@ import com.data.repositories.WifiRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class WifiService {
 
     private final WifiRepository wifiRepository;
     private final RestaurantService restaurantService;
+
+    @Value("${spring.qrCodesDirectory}")
+    private String qrCodesDirectory;
 
     public ResponseEntity<HttpStatus> addWifi(String restaurantName, String city, Wifi wifiDto) {
 
@@ -33,6 +37,9 @@ public class WifiService {
                 .encryption(wifiDto.getEncryption())
                 .restaurant(restaurant)
                 .build();
+
+        String qrcodePath = qrCodesDirectory + "/wifi/" + "/" + restaurant.getName() + "_" + restaurant.getCity() + ".pdf";
+        wifi.setQRCodePath(qrcodePath);
 
         wifiRepository.save(wifi);
         restaurantService.save(restaurant);
