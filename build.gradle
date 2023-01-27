@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.6'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+
 }
 
 version = '0.0.1-SNAPSHOT'
@@ -38,6 +39,9 @@ dependencies {
 	runtimeOnly 'org.springframework.boot:spring-boot-starter-jdbc'
 
 	implementation 'org.apache.pdfbox:pdfbox:2.0.26'
+	//liquibase
+	//implementation 'org.liquibase:liquibase-core:4.19.0'
+	//implementation 'org.liquibase:liquibase-maven-plugin:4.19.0'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -47,6 +51,5 @@ dependencies {
 	runtimeOnly 'org.springframework.boot:spring-boot-starter-jdbc'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17

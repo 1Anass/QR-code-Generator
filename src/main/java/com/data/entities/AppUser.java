@@ -4,6 +4,8 @@ package com.data.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
@@ -35,7 +37,8 @@ public class AppUser {
     private String password;
     @ManyToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
     private Collection<Authority> authorities =new ArrayList<>();
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Restaurant> restaurants;
 
     public AppUser(String userName, String firstName, String lastName, String emailAddress,  String password) {
