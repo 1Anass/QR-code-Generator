@@ -1,7 +1,9 @@
 package com.services;
 
+import com.data.dtos.RestaurantDTO;
 import com.data.entities.AppUser;
 import com.data.entities.Restaurant;
+import com.data.mappers.RestaurantMapper;
 import com.data.repositories.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ public class RestaurantService {
 
     private final AppUserService appUserService;
     private final RestaurantRepository restaurantRepository;
+    private final RestaurantMapper restaurantMapper;
 
     public ResponseEntity<HttpStatus> addRestaurant(Restaurant restaurantDto) {
 
@@ -90,11 +93,11 @@ public class RestaurantService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public Restaurant findRestaurantById(Long id) {
+    public ResponseEntity<HttpStatus> findRestaurantById(Long id) {
         List<Restaurant> restaurants = findRestaurantByUser();
-        return restaurants.stream()
+        return new ResponseEntity(restaurants.stream()
                 .filter(res -> res.getRestaurantId() == id)
-                .collect(Collectors.toList()).get(0);
+                .collect(Collectors.toList()).get(0), HttpStatus.FOUND);
     }
 
     public Restaurant findRestaurant(String name, String city) {
@@ -114,15 +117,22 @@ public class RestaurantService {
             log.error("User does not exist in DB");
             return null;
         }
+
         return restaurantRepository.findByAppUserId(user.getId());
     }
 
-    public Restaurant findRestaurantByUserAndId(Long id){
+    public ResponseEntity<HttpStatus>retrieveRestaurantByUser() {
+        return new ResponseEntity(restaurantMapper.toRestaurantDTOs(findRestaurantByUser()), HttpStatus.FOUND);
+    }
+
+
+
+    /*public Restaurant findRestaurantByUserAndId(Long id){
         return findRestaurantByUser()
                 .stream()
                 .filter(res -> res.getRestaurantId() == id)
                 .collect(Collectors.toList()).get(0);
-    }
+    }*/
 
     // only called to update restaurant record
     public void save(Restaurant restaurant) {

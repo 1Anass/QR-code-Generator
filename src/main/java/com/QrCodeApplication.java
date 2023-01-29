@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ComponentScan({
+
+		"com.data.mappers",
 		"com.services",
 		"com.controllers",
 		"com.security",

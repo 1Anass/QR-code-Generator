@@ -20,28 +20,28 @@ public class WifiController {
     }
 
     @GetMapping("/getWifi")
-    public Wifi findWifiByRestaurant(@RequestParam String name, @RequestParam String city){
+    public ResponseEntity<HttpStatus> findWifiByRestaurant(@RequestParam String name, @RequestParam String city){
         return wifiService.findWifiByRestaurant(name, city);
     }
 
     @PatchMapping("/updateWifi/updatePassword")
-    public ResponseEntity<HttpStatus> updateWifiPassword(@RequestParam String wifiId, @RequestBody String password) {
-        return wifiService.updateWifiPassword(wifiId, password);
+    public ResponseEntity<HttpStatus> updateWifiPassword(@RequestParam String name, @RequestParam String city, @RequestParam String oldPassword, @RequestBody String password) {
+        return wifiService.updateWifiPassword(name, city, oldPassword, password);
     }
 
     @PatchMapping("/updateWifi/updateName")
-    public ResponseEntity<HttpStatus> updateWifiName(@RequestParam String wifiId, @RequestBody String wifiName) {
-        return wifiService.updateWifiName(wifiId, wifiName);
+    public ResponseEntity<HttpStatus> updateWifiName(@RequestParam String name, @RequestParam String city, @RequestBody String wifiName) {
+        return wifiService.updateWifiName(name, city, wifiName);
     }
 
     @PatchMapping("/updateWifi/updateEncryption")
-    public ResponseEntity<HttpStatus> updateWifiEncryption(@RequestParam String wifiId, @RequestBody String encryption) {
-        return wifiService.updateWifiEncryption(wifiId, encryption);
+    public ResponseEntity<HttpStatus> updateWifiEncryption(@RequestParam String name, @RequestParam String city, @RequestBody String encryption) {
+        return wifiService.updateWifiEncryption(name, city, encryption);
     }
 
     @PostMapping("/deleteWifi")
-    public ResponseEntity<HttpStatus> addWifi(@RequestParam String wifiId) {
-        return wifiService.deleteWifi(wifiId);
+    public ResponseEntity<HttpStatus> deleteWifi(@RequestParam String name, @RequestParam String city) {
+        return wifiService.deleteWifi(name, city);
     }
 
 

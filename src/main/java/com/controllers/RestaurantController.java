@@ -1,5 +1,6 @@
 package com.controllers;
 
+import com.data.dtos.RestaurantDTO;
 import com.data.entities.Restaurant;
 import com.services.RestaurantService;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ public class RestaurantController {
     }
 
     @GetMapping("/findByUsername")
-    public List<Restaurant> findRestaurants(){
-        return restaurantService.findRestaurantByUser();
+    public ResponseEntity<HttpStatus> findRestaurants(){
+        return restaurantService.retrieveRestaurantByUser();
     }
 
     @PostMapping("/deleteRestaurant")

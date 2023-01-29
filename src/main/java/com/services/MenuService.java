@@ -1,8 +1,10 @@
 package com.services;
 
 
+import com.data.dtos.MenuDTO;
 import com.data.entities.Menu;
 import com.data.entities.Restaurant;
+import com.data.mappers.MenuMapper;
 import com.data.repositories.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,8 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final RestaurantService restaurantService;
+    private final MenuMapper menuMapper;
+
     @Value("${spring.filesDirectory}")
     private String filesDirectory;
 
@@ -110,26 +114,29 @@ public class MenuService {
         return menuRepository.findByMenuId(menuId).orElse(null);
     }
 
-    public Menu findMenu(String name, String city){
+    public ResponseEntity<HttpStatus>  findMenu(String name, String city){
         Restaurant restaurant = restaurantService.findRestaurant(name, city);
         if (restaurant == null) {
             log.error("The corresponding restaurant does not exist");
-            return null;
+            return new ResponseEntity(null , HttpStatus.NOT_FOUND);
+
         }
-        return restaurant.getMenu();
+        Menu menu = restaurant.getMenu();
+        if(menu == null){
+            log.error("No menu was created for this restaurant");
+            return new ResponseEntity(null , HttpStatus.NOT_FOUND);
+        }
+        MenuDTO menuDTO = new MenuDTO();
+        menuDTO.setMenuName(menu.getMenuName());
+        menuDTO.setMenuFile(findMenuFile(menu));
+        menuDTO.setQrcodeFile(findMenuQRCode(menu));
+        menuDTO.setCreationDate(menu.getCreationDate());
+        menuDTO.setModificationDate(menu.getModificationDate());
+        return new ResponseEntity(menuDTO, HttpStatus.FOUND);
     }
 
-    public byte[] findMenuFile(String name, String city){
-        Restaurant restaurant = restaurantService.findRestaurant(name, city);
-        if (restaurant == null) {
-            log.error("The corresponding restaurant does not exist");
-            return null;
-        }
-        if(restaurant.getMenu() == null){
-            log.error("There is no menu for this restaurant");
-        }
-
-        File menuFile = new File(restaurant.getMenu().getFilePath());
+    private byte[] findMenuFile(Menu menu){
+        File menuFile = new File(menu.getFilePath());
         try {
             byte[] fileContent = Files.readAllBytes(menuFile.toPath());
             return fileContent;
@@ -141,17 +148,9 @@ public class MenuService {
 
     }
 
-    public byte[] findMenuQRCode(String name, String city){
-        Restaurant restaurant = restaurantService.findRestaurant(name, city);
-        if (restaurant == null) {
-            log.error("The corresponding restaurant does not exist");
-            return null;
-        }
-        if(restaurant.getMenu() == null){
-            log.error("There is no menu for this restaurant");
-        }
-
-        File qrcodeFile = new File(restaurant.getMenu().getQRCodePath());
+    private byte[] findMenuQRCode(Menu menu){
+        MenuDTO menuDTO = new MenuDTO();
+        File qrcodeFile = new File(menu.getQRCodePath());
         if(!qrcodeFile.exists()){
             log.error("QRCode is not yet generated for this menu");
             return null;

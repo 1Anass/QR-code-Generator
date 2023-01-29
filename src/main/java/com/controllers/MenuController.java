@@ -1,5 +1,6 @@
 package com.controllers;
 
+import com.data.dtos.MenuDTO;
 import com.data.entities.Menu;
 import com.data.entities.Restaurant;
 import com.services.MenuService;
@@ -27,18 +28,8 @@ public class MenuController {
     }
 
     @GetMapping("/findMenu")
-    public Menu findMenu(@RequestParam String name, @RequestParam String city){
+    public ResponseEntity<HttpStatus> findMenu(@RequestParam String name, @RequestParam String city){
         return menuService.findMenu(name, city);
-    }
-
-    @GetMapping("/findMenuFile")
-    public byte[] findMenuFile(@RequestParam String name, @RequestParam String city){
-        return menuService.findMenuFile(name, city);
-    }
-
-    @GetMapping("/findMenuQRCde")
-    public byte[] findMenuQRCode(@RequestParam String name, @RequestParam String city){
-        return menuService.findMenuQRCode(name, city);
     }
 
     @PostMapping("/deleteMenu")

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Builder
 @Data
@@ -29,7 +30,10 @@ public class Wifi {
     private String encryption;
     @Column(name = "qrcodePath")
     private String QRCodePath;
-    @OneToOne(mappedBy = "wifi")
-    private Restaurant restaurant;
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
+    @Column(name = "modification_date")
+    private LocalDateTime modificationDate;
+
 
 }
