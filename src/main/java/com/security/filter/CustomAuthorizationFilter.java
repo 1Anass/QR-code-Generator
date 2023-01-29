@@ -24,7 +24,7 @@ import java.util.*;
 @Slf4j
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-    private final String SIGNING_KEY = "MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKDCoM8GpohbxMPY4KXgzU80Mwi1Y1hcDRnGBV+Y/P2WSvcsMX8+xNPjFtP96jJGDNcGcLINBw3JCtrSXXNkvdsCAwEAAQ==";
+    private final String SIGNING_KEY = "75a3300186f08f28d09a59a8aa8dfc9588b60747ed9be636c77f50c671919666";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -38,7 +38,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
                     String token = authorizationHeader.substring("Bearer ".length());
 
-                    Algorithm algorithm = Algorithm.HMAC512(SIGNING_KEY.getBytes());
+                    Algorithm algorithm = Algorithm.HMAC256(SIGNING_KEY.getBytes());
 
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);

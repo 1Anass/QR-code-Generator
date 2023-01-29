@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -53,7 +54,7 @@ public class RestaurantService {
         List<Restaurant> restaurants = findRestaurantByUser();
         Restaurant restaurant = restaurants.stream()
                 .filter(res -> res.getRestaurantId() == restaurantDto.getRestaurantId())
-                .toList().get(0);
+                .collect(Collectors.toList()).get(0);
         if (restaurant == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -74,13 +75,18 @@ public class RestaurantService {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public ResponseEntity<HttpStatus> deleteRestaurant(Long id) {
+    public ResponseEntity<HttpStatus> deleteRestaurant(Restaurant restaurantDto) {
         log.debug("deleteRestaurant method started");
-        Restaurant restaurant = findRestaurantById(id);
+
+        Restaurant restaurant = findRestaurantByUser()
+                .stream()
+                .filter(res -> res.getRestaurantId() == restaurantDto.getRestaurantId())
+                .collect(Collectors.toList()).get(0);
+
         if (restaurant == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        restaurantRepository.deleteById(id);
+        restaurantRepository.deleteById(restaurant.getRestaurantId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -88,14 +94,17 @@ public class RestaurantService {
         List<Restaurant> restaurants = findRestaurantByUser();
         return restaurants.stream()
                 .filter(res -> res.getRestaurantId() == id)
-                .toList().get(0);
+                .collect(Collectors.toList()).get(0);
     }
 
     public Restaurant findRestaurant(String name, String city) {
-        return restaurantRepository.findByNameAndCity(name, city).orElse(null);
+
+        return findRestaurantByUser()
+                .stream()
+                .filter(res -> res.getName().equals(name) && res.getCity().equals(city))
+                .collect(Collectors.toList()).get(0);
     }
 
-    //security vulnerability ussername argument should be extracted from appcontext info
     public List<Restaurant> findRestaurantByUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) auth.getPrincipal();
@@ -108,6 +117,14 @@ public class RestaurantService {
         return restaurantRepository.findByAppUserId(user.getId());
     }
 
+    public Restaurant findRestaurantByUserAndId(Long id){
+        return findRestaurantByUser()
+                .stream()
+                .filter(res -> res.getRestaurantId() == id)
+                .collect(Collectors.toList()).get(0);
+    }
+
+    // only called to update restaurant record
     public void save(Restaurant restaurant) {
         restaurantRepository.save(restaurant);
     }

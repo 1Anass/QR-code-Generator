@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -35,8 +36,12 @@ public class Menu {
     @Column(name = "status")
     private Boolean status;
 
-    @OneToOne(mappedBy = "menu")
-    private Restaurant restaurant;
+    @Column(name = "creation_date")
+    private LocalDateTime creationDate;
+
+    @Column(name = "modification_date")
+    private LocalDateTime modificationDate;
+
 
     @Override
     public String toString() {
@@ -47,7 +52,7 @@ public class Menu {
                 ", filePath='" + filePath + '\'' +
                 ", qrcodePath='" + QRCodePath + '\'' +
                 ", status=" + status +
-                ", restaurant=" + restaurant.getName() +
+                ", creationDate=" + creationDate + '\'' +
                 '}';
     }
 

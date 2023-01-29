@@ -33,7 +33,7 @@ public class RestaurantController {
 
     @PostMapping("/deleteRestaurant")
     public ResponseEntity<HttpStatus> deleteRestaurant(@RequestBody Restaurant restaurant){
-      return   restaurantService.deleteRestaurant(restaurant.getRestaurantId());
+      return   restaurantService.deleteRestaurant(restaurant);
     }
 
 }

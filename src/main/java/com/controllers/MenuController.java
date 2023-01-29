@@ -1,5 +1,6 @@
 package com.controllers;
 
+import com.data.entities.Menu;
 import com.data.entities.Restaurant;
 import com.services.MenuService;
 import com.services.RestaurantService;
@@ -23,6 +24,26 @@ public class MenuController {
     @PatchMapping("/updateMenu")
     public ResponseEntity<HttpStatus> updateRestaurant(@RequestParam String name, @RequestParam String city, @RequestBody byte[] file) {
         return menuService.updateMenu(name, city, file);
+    }
+
+    @GetMapping("/findMenu")
+    public Menu findMenu(@RequestParam String name, @RequestParam String city){
+        return menuService.findMenu(name, city);
+    }
+
+    @GetMapping("/findMenuFile")
+    public byte[] findMenuFile(@RequestParam String name, @RequestParam String city){
+        return menuService.findMenuFile(name, city);
+    }
+
+    @GetMapping("/findMenuQRCde")
+    public byte[] findMenuQRCode(@RequestParam String name, @RequestParam String city){
+        return menuService.findMenuQRCode(name, city);
+    }
+
+    @PostMapping("/deleteMenu")
+    public ResponseEntity<HttpStatus> deleteMenu(@RequestParam String name, @RequestParam String city){
+        return menuService.deleteMenu(name, city);
     }
 
 }

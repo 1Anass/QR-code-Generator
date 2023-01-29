@@ -36,9 +36,9 @@ public class Restaurant {
     private Integer maxCapacity;
     @ManyToOne
     private AppUser appUser;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Menu menu;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Wifi wifi;
 
     @Override

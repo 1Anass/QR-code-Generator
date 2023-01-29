@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface MenuRepository extends CrudRepository<Menu, String> {
-    Optional<Menu> findByRestaurant(Restaurant restaurant);
+public interface MenuRepository extends CrudRepository<Menu, Long> {
 
     Optional<Menu> findByMenuId(Long menuId);
 }

@@ -5,6 +5,7 @@ spring:
   filesDirectory: "C://menus"
   qrCodesDirectory: "C://qrcodes"
 
+
   jpa:
     hibernate:
       ddl-auto: create-drop

@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -39,10 +42,15 @@ public class MenuService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+        if(restaurant.getMenu() != null){
+            log.error("The corresponding restaurant already have a menu, delete the existing one");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         Menu menu = Menu.builder()
                 .menuName(menuName)
                 .token(generateToken())
-                .restaurant(restaurant)
+                .creationDate(LocalDateTime.now())
                 .build();
 
         String menuPath = filesDirectory + "/" + menu.getToken() + "/" + name + "_" + city + ".pdf";
@@ -88,6 +96,8 @@ public class MenuService {
         try {
             FileOutputStream fileOutput = new FileOutputStream(menuFile);
             fileOutput.write(file);
+            menu.setModificationDate(LocalDateTime.now());
+            menuRepository.save(menu);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (IOException e) {
             log.error("could not write bytes to menu file ");
@@ -99,6 +109,81 @@ public class MenuService {
     public Menu findMenuById(Long menuId){
         return menuRepository.findByMenuId(menuId).orElse(null);
     }
+
+    public Menu findMenu(String name, String city){
+        Restaurant restaurant = restaurantService.findRestaurant(name, city);
+        if (restaurant == null) {
+            log.error("The corresponding restaurant does not exist");
+            return null;
+        }
+        return restaurant.getMenu();
+    }
+
+    public byte[] findMenuFile(String name, String city){
+        Restaurant restaurant = restaurantService.findRestaurant(name, city);
+        if (restaurant == null) {
+            log.error("The corresponding restaurant does not exist");
+            return null;
+        }
+        if(restaurant.getMenu() == null){
+            log.error("There is no menu for this restaurant");
+        }
+
+        File menuFile = new File(restaurant.getMenu().getFilePath());
+        try {
+            byte[] fileContent = Files.readAllBytes(menuFile.toPath());
+            return fileContent;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
+
+    public byte[] findMenuQRCode(String name, String city){
+        Restaurant restaurant = restaurantService.findRestaurant(name, city);
+        if (restaurant == null) {
+            log.error("The corresponding restaurant does not exist");
+            return null;
+        }
+        if(restaurant.getMenu() == null){
+            log.error("There is no menu for this restaurant");
+        }
+
+        File qrcodeFile = new File(restaurant.getMenu().getQRCodePath());
+        if(!qrcodeFile.exists()){
+            log.error("QRCode is not yet generated for this menu");
+            return null;
+        }
+        try {
+            byte[] fileContent = Files.readAllBytes(qrcodeFile.toPath());
+            return fileContent;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public ResponseEntity<HttpStatus> deleteMenu(String name, String city){
+        Restaurant restaurant = restaurantService.findRestaurant(name, city);
+        if (restaurant == null) {
+            log.error("The corresponding restaurant does not exist");
+            return null;
+        }
+        Menu menu = restaurant.getMenu();
+        if(menu == null){
+            log.error("No menu was found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        menuRepository.deleteById(menu.getMenuId());
+        restaurant.setMenu(null);
+        restaurantService.save(restaurant);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 
 
     private String generateToken() {

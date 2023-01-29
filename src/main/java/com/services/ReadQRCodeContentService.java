@@ -2,6 +2,7 @@ package com.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -47,7 +48,8 @@ public class ReadQRCodeContentService {
 
     }
 
-    public String getPath(String name, String city){
+    @Cacheable
+    protected String getPath(String name, String city){
         return restaurantService.findRestaurant(name, city).getMenu().getFilePath();
     }
 
